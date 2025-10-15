@@ -1,0 +1,20 @@
+{% extends "baza.html" %}
+
+{% block content %}
+  <h1>Informatii despre site</h1>
+  <p>Acesta este continutul principal al paginii info.</p>
+  {% if data_html %}
+    <div>
+      {{ data_html | safe}}
+    </div>
+  {% endif %}
+  
+  <h2>Detalii despre accesarea curentă:</h2>
+  <ul>
+    <li><strong>ID Accesare:</strong> {{ accesare_curenta.id }}</li>
+    <li><strong>IP Client:</strong> {{ accesare_curenta.ip_client }}</li>
+    <li><strong>Pagină vizitată:</strong> <code>{{ accesare_curenta.pagina }}</code></li>
+    <li><strong>URL complet:</strong> <code>{{ accesare_curenta.url }}</code></li>
+    <li><strong>Data și ora:</strong> {{ accesare_curenta.data }}</li>
+  </ul>
+{% endblock %}
