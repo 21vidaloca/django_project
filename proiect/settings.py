@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'aplicatie',
+    'aplicatie.apps.AplicatieConfig',
 ]
 
 MIDDLEWARE = [
@@ -76,10 +76,18 @@ WSGI_APPLICATION = 'proiect.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'OPTIONS': {
+                'options': '-c search_path=django'
+        },
+        'NAME': 'dj2025',   # numele bazei de date
+        'USER': 'david',      # username pt conexiunea la baza de date
+        'PASSWORD': 'david',
+        'HOST': 'localhost',  # sau IP-ul serverului
+        'PORT': '5432',       # portul implicit pentru PostgreSQL
     }
 }
+
 
 
 # Password validation

@@ -1,0 +1,58 @@
+{% extends "baza.html" %}
+
+{% block title %}Log uri{% endblock %}
+
+{% block content %}
+  {% if error_message %}
+    <div style="color: red; border: 1px solid red; padding: 10px; margin-bottom: 20px;">
+      {{ error_message }}
+    </div>
+  {% endif %}
+  <p>Au fost inregistrate un total de <strong>{{ nr_accesari }}</strong> cereri.</p>
+
+  <table style="width: 100%; border-collapse: collapse;">
+    <thead style="background-color: #333; color: white;">
+      <tr>
+        <th style="padding: 8px; text-align: left;">ID</th>
+        <th style="padding: 8px; text-align: left;">Data și Ora</th>
+        <th style="padding: 8px; text-align: left;">IP Client</th>
+        <th style="padding: 8px; text-align: left;">Pagină</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for entry in log_entries %}
+        <tr style="border-bottom: 1px solid #ddd;">
+          <td style="padding: 8px;">{{ entry.id }}</td>
+          <td style="padding: 8px;">{{ entry.timestamp|date:"d M Y, H:i:s" }}</td>
+          <td style="padding: 8px;">{{ entry.ip_client }}</td>
+          <td style="padding: 8px;"><code>{{ entry.pagina }}</code></td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="4" style="padding: 8px; text-align: center;">Nu exista nicio accesare înregistrata.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% if numar_total_accesari is not None %}
+    <div style="background-color: #e6f7ff; border: 1px solid #91d5ff; padding: 15px; margin-bottom: 20px;">
+      <h2>Număr total de accesări</h2>
+      <p>De la pornirea serverului, au fost înregistrate <strong>{{ nr_accesari }}</strong> accesări.</p>
+    </div>
+  {% endif %}
+
+  {% if filtrare %}
+    <p style="font-style: italic; color: #555;">Rezultatele sunt filtrate și ordonate conform ID-urilor specificate.</p>
+  {% endif %}
+  {% if lista_detalii_accesari %}
+    <div style="background-color: #f6ffed; border: 1px solid #b7eb8f; padding: 15px; margin-bottom: 20px;">
+      <h2>Detalii accesări (Dată și Oră)</h2>
+      <ul>
+        {% for detaliu in lista_detalii_accesari %}
+          <li>{{ detaliu }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+
+{% endblock %}

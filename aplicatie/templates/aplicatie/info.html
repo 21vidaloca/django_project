@@ -13,8 +13,54 @@
   <ul>
     <li><strong>ID Accesare:</strong> {{ accesare_curenta.id }}</li>
     <li><strong>IP Client:</strong> {{ accesare_curenta.ip_client }}</li>
-    <li><strong>Pagină vizitată:</strong> <code>{{ accesare_curenta.pagina }}</code></li>
+    <li><strong>Pagina vizitata:</strong> <code>{{ accesare_curenta.pagina }}</code></li>
     <li><strong>URL complet:</strong> <code>{{ accesare_curenta.url }}</code></li>
     <li><strong>Data și ora:</strong> {{ accesare_curenta.data }}</li>
   </ul>
+
+  <div style="border: 1px solid #ccc; padding: 15px; margin-top: 20px;">
+    <h2>Parametri</h2>
+    {% if numar_parametrii > 0 %}
+      <p>Pagina a primit un număr de <strong>{{ numar_parametrii }}</strong> parametrii.</p>
+      <p>Numele acestora sunt:</p>
+      <ul>
+        {% for nume in lista_nume_parametri %}
+          <li><code>{{ nume }}</code></li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>Pagina nu a primit niciun parametru.</p>
+    {% endif %}
+    {% if tabel_headers %}
+    <div style="margin-top: 20px;">
+      <h2>Tabel Accesari</h2>
+      <table style="width: 100%; border-collapse: collapse;">
+        <thead style="background-color: #333; color: white;">
+          <tr>
+            {% for header in tabel_headers %}
+              <th style="padding: 8px; text-align: left; text-transform: capitalize;">{{ header }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in tabel_rows %}
+            <tr style="border-bottom: 1px solid #ddd;">
+              {% for cell in row %}
+                <td style="padding: 8px;"><code>{{ cell }}</code></td>
+              {% endfor %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% endif %}
+  {% if cel_mai_mult_accesata and cel_mai_putin_accesata %}
+    <div style="border-top: 2px solid #333; margin-top: 30px; padding-top: 15px;">
+      <h3>Statistici Accesări</h3>
+      <p><strong>Cea mai mult accesată pagină:</strong> <code>{{ cel_mai_mult_accesata }}</code></p>
+      <p><strong>Cea mai puțin accesată pagină:</strong> <code>{{ cel_mai_putin_accesata }}</code></p>
+    </div>
+  {% endif %}
+  </div>
+
 {% endblock %}
