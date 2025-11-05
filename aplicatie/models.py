@@ -66,6 +66,12 @@ class Ceasuri(models.Model):
     tip_geam = models.CharField(max_length=50)
     diametru_carcasa = models.IntegerField()
     pret = models.DecimalField(max_digits=10, decimal_places=2)
+    # relatii
+    brand = models.ForeignKey(Brand, on_delete=models.PROTECT,null=True, blank=True)
+    mecanism = models.ForeignKey(Mecanism, on_delete=models.PROTECT,null=True, blank=True)
+    curea = models.ForeignKey(Curea, on_delete=models.PROTECT,null=True, blank=True)
+    oferta = models.ForeignKey(Oferta, on_delete=models.SET_NULL, null=True, blank=True)
+    caracteristici = models.ManyToManyField(Caracteristici, blank=True)
 
     def __str__(self):
-        return f"{self.nume}, {self.descriere}"
+        return f"{self.nume_model}, {self.pret}"

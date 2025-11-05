@@ -1,9 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 import locale
 from datetime import datetime
 from collections import Counter
 from .clase import Accesare
 from django.http import HttpResponse
+from .models import Ceasuri
+from django.core.paginator import Paginator
 def index(request):
 	return HttpResponse("Primul raspuns")
 try:
@@ -49,45 +51,36 @@ def info(request):
     tabel_headers = None
     tabel_rows = None
 
-    # --- Logica NOUĂ pentru parametrul 'tabel' ---
     tabel_param = request.GET.get('tabel')
     if tabel_param:
         toate_proprietatile = ['id', 'ip_client', 'pagina', 'url', 'data']
         
-        # Determinăm ce coloane (antete) să afișăm
         if tabel_param.lower() == 'tot':
             tabel_headers = toate_proprietatile
         else:
             tabel_headers = [h.strip() for h in tabel_param.split(',')]
 
-        # Pregătim rândurile tabelului
         tabel_rows = []
         for accesare in istoric_accesari:
             row_data = []
             for header in tabel_headers:
-                # Folosim getattr pentru a accesa dinamic proprietatea sau metoda obiectului
                 if hasattr(accesare, header):
                     valoare = getattr(accesare, header)
-                    # Dacă e o metodă (ca url() sau pagina()), o apelăm
                     if callable(valoare):
                         row_data.append(valoare())
                     else:
                         row_data.append(valoare)
                 else:
-                    row_data.append("N/A") # Adăugăm N/A dacă proprietatea nu există
+                    row_data.append("N/A") 
             tabel_rows.append(row_data)
     cel_mai_putin_accesata = None
     cel_mai_mult_accesata = None
 
-    # Calculăm frecvențele doar dacă există accesări înregistrate
     if istoric_accesari:
-        # Extragem calea fiecărei pagini accesate
         lista_pagini = [acc.pagina() for acc in istoric_accesari]
         
-        # Numărăm de câte ori apare fiecare pagină
         frecvente = Counter(lista_pagini)
         
-        # Găsim pagina cu cele mai puține și cele mai multe accesări
         cel_mai_putin_accesata = min(frecvente, key=frecvente.get)
         cel_mai_mult_accesata = max(frecvente, key=frecvente.get)
     context = {
@@ -129,7 +122,11 @@ def log_view(request):
     numar_total_accesari=len(istoric_accesari)
     lista_detalii_accesari=None
     if accesari_param == 'detalii':
-        lista_detalii_accesari = [acc.timestamp.strftime("%d %B %Y, ora %H:%M:%S") for acc in istoric_accesari]
+        lista_detalii_accesari = [acc.timestamp.strftime("%d %B %Y, ora %H")+" ID "+str(acc.id) for acc in istoric_accesari]
+        # lista_noua=[]
+        # for acc in istoric_accesari:
+        #     lista_noua.append(acc.id)
+        # lista_detalii_accesari = lista_noua
 
     if iduri_param_list:
         is_filtered_by_id = True
@@ -167,6 +164,23 @@ def log_view(request):
         'log_entries': log_acces,
         'error_message': error_message,
         'filtrare': is_filtered_by_id,
-        
+        'lista_detalii_accesari': lista_detalii_accesari,
     }
     return render(request, 'aplicatie/log.html', context)
+
+def afis_produse(request):
+    ceasuri=Ceasuri.objects.select_related('brand').order_by('nume_model')
+    paginator=Paginator(ceasuri,5)
+    page_number=request.GET.get('page')
+    pagina_produse=paginator.get_page(page_number)
+    context={
+        "pagina_produse":pagina_produse,
+    }
+    return render(request, "aplicatie/ceasuri.html",context)
+
+def afisare_detalii_produs(request, produs_id):
+    ceas = get_object_or_404(Ceasuri, id=produs_id)
+    context = {
+        'ceas': ceas,
+    }
+    return render(request, "aplicatie/detalii.html",context)

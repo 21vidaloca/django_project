@@ -1,0 +1,52 @@
+{% load static %}
+
+{% block content %}
+    <div class="produs-detaliu">
+
+        <img src="https://assets.isu.pub/document-structure/240304082841-e1d024d0200a23a9b8a91b05d07ea3be/v1/5dac937cd00b781719499d0a4f67996b.jpeg" alt="{{ ceas.nume_model }}" style="max-width: 400px;">
+
+        <h1>{{ ceas.nume_model }}</h1>
+        
+        <h2>Detalii Produs</h2>
+        
+        <p><strong>Brand:</strong> {{ ceas.brand.nume_brand }}</p>
+        <p><strong>Pret:</strong> {{ ceas.pret }} RON</p>
+        <p><strong>Stoc:</strong> 
+            {% if ceas.stoc > 0 %}
+                În stoc ({{ ceas.stoc }} buc.)
+            {% else %}
+                Stoc epuizat
+            {% endif %}
+        </p>
+        
+        <h3>Specificatii Tehnice</h3>
+        <ul>
+            <li><strong>Mecanism:</strong> {{ ceas.mecanism.get_tip_mecanism_display }}</li>
+            <li><strong>Geam:</strong> {{ ceas.tip_geam }}</li>
+            <li><strong>Diametru carcasă:</strong> {{ ceas.diametru_carcasa }} mm</li>
+            <li><strong>Curea:</strong> {{ ceas.curea.material_curea }} ({{ ceas.curea.culoare }})</li>
+        </ul>
+        
+        <h3>Caracteristici Suplimentare</h3>
+        {% if ceas.caracteristici.all %}
+            <ul>
+                {% for caracteristica in ceas.caracteristici.all %}
+                    <li>{{ caracteristica.nume }}: {{ caracteristica.descriere }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Nicio caracteristica suplimentara.</p>
+        {% endif %}
+        
+        {% if ceas.oferta %}
+            <div style="background-color: #ffc; border: 1px solid #e6db55; padding: 10px;">
+                <strong>Oferta Speciala:</strong> {{ ceas.oferta.nume_oferta }}
+                (Valabila pana la: {{ ceas.oferta.data_sfarsit }})
+            </div>
+        {% endif %}
+        
+        <br>
+        <a href="{% url 'produse' %}">Inapoi la lista de produse</a>
+        
+    </div>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% load static%}
+{% block content %}
+    <h1>Listă Produse (Ceasuri)</h1>
+
+    <div class="lista-produse">
+        
+        {% for ceas in pagina_produse %}
+            <div class="produs" style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+                
+                <a href="{% url 'detaliu-produs' ceas.id %}">{{ ceas.nume_model }}</a>
+                <p><strong>Pret:</strong> {{ ceas.pret }} RON</p>
+                
+                {% if ceas.brand %}
+                    <p><strong>Brand:</strong> {{ ceas.brand.nume_brand }}</p>
+                {% else %}
+                    <p><strong>Brand:</strong> Necunoscut</p>
+                {% endif %}
+                
+                <p><strong>Stoc:</strong> {{ ceas.stoc }}</p>
+            </div>
+        {% empty %}
+            <p>Nu exista produse de afisat.</p>
+        {% endfor %}
+        
+    </div>
+
+    <hr>
+
+    <div class="pagination">
+        <span class="step-links">
+            
+            {% if pagina_produse.has_previous %}
+                <a href="?page=1">&laquo; prima</a>
+                <a href="?page={{ pagina_produse.previous_page_number }}">anterioara</a>
+            {% endif %}
+
+            <span class="current">
+                Pagina {{ pagina_produse.number }} din {{ pagina_produse.paginator.num_pages }}.
+            </span>
+
+            {% if pagina_produse.has_next %}
+                <a href="?page={{ pagina_produse.next_page_number }}">urmatoare</a>
+                <a href="?page={{ pagina_produse.paginator.num_pages }}">ultima &raquo;</a>
+            {% endif %}
+            
+        </span>
+    </div>
+
+{% endblock %}
