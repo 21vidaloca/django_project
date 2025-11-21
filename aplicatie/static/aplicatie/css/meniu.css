@@ -1,0 +1,65 @@
+/* aplicatie/static/aplicatie/css/meniu.css */
+
+/* Bara de navigare principală */
+.navbar {
+    background-color: #333;
+    overflow: hidden;
+}
+
+/* Link-urile de bază din meniu */
+.navbar a {
+    float: left;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+/* Containerul pentru dropdown */
+.dropdown {
+    float: left;
+    overflow: hidden;
+    
+}
+
+/* Butonul care activează dropdown-ul */
+.dropdown .dropbtn {
+    font-size: 16px;
+    border: none;
+    outline: none;
+    color: white;
+    padding: 14px 16px;
+    background-color: inherit;
+    font-family: inherit;
+    margin: 0;
+}
+
+/* Conținutul ascuns al dropdown-ului */
+.dropdown-content {
+    display: none; /* Ascuns implicit */
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+/* Link-urile din interiorul dropdown-ului */
+.dropdown-content a {
+    float: none;
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+}
+
+.dropdown-content a:hover {
+    background-color: #ddd;
+}
+
+/* Afișează dropdown-ul la hover */
+.dropdown:hover .dropdown-content {
+    display: block;
+}

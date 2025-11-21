@@ -1,0 +1,25 @@
+{% extends "baza.html" %}
+{% block content %}
+    <h1>Lista Categorii (Branduri)</h1>
+
+    <div class="lista-produse">
+        
+        {% for branduri in categorii %}
+            <div class="brand" style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+                <a href="{% url 'detalii_categorii' branduri.nume_brand %}">
+                {% if branduri.imagine %}
+                    <img src="{{ branduri.imagine.url }}" alt="{{ branduri.nume_brand }}" style="width: 100px; height: auto; object-fit: contain;">
+                {% else %}
+                    <div style="width: 100px; height: 100px; background-color: #f0f0f0; display: flex; align-items: center; justify-content: center;">Fără Logo</div>
+                {% endif %}</a>
+                <p> {{ branduri.nume_brand }}</p>
+                <p><strong>Tara origine:</strong> {{ branduri.tara_origine }}</p>
+                <p><strong>An infiintare:</strong> {{ branduri.an_infiintare }}</p>
+            </div>
+        {% empty %}
+            <p>Nu exista categorii de afisat.</p>
+        {% endfor %}
+        
+    </div>
+    <hr>
+{% endblock %}

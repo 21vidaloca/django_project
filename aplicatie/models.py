@@ -16,7 +16,14 @@ class Brand(models.Model):
     nume_brand = models.CharField(max_length=100, unique=True)  # unic
     tara_origine = models.CharField(max_length=50, blank=True)
     an_infiintare = models.IntegerField(null=True, blank=True)
-
+    ALEGERI_CULOARE = [
+    ('#C0C0C0', 'Argintiu'),
+    ('#FFD700', 'Auriu'),   
+    ('#000000', 'Negru'),   
+    ('#0000FF', 'Albastru'), 
+    ]
+    culoare = models.CharField(max_length=50, choices=ALEGERI_CULOARE, default='#C0C0C0')
+    imagine = models.ImageField(upload_to='imagini_branduri/', null=True, blank=True)
     def __str__(self):
         return self.nume_brand
 
@@ -64,8 +71,9 @@ class Ceasuri(models.Model):
     nume_model = models.CharField(max_length=255)
     stoc = models.IntegerField(default=0)  # valoare default
     tip_geam = models.CharField(max_length=50)
-    diametru_carcasa = models.IntegerField()
+    diametru_carcasa = models.IntegerField(null=True)
     pret = models.DecimalField(max_digits=10, decimal_places=2)
+    poza = models.ImageField(upload_to='imagini_ceasuri/', null=True, blank=True)
     # relatii
     brand = models.ForeignKey(Brand, on_delete=models.PROTECT,null=True, blank=True)
     mecanism = models.ForeignKey(Mecanism, on_delete=models.PROTECT,null=True, blank=True)

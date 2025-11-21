@@ -1,19 +1,69 @@
+{% load static %}
+
 <!DOCTYPE html>
-{%load static%}
-<html>
-    <head>
-        <title>{% block title %}Pagina mea{% endblock %}</title>
-        <link rel="stylesheet" href="{% static "aplicatie/css/stil.css" %}" type="text/css">
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <title>Magazinul Meu de Ceasuri</title>
+    
+    <link rel="stylesheet" href="{% static 'aplicatie/css/meniu.css' %}">
+    
     </head>
-    <body>
-        <header>
-            <h1>Site-ul meu</h1>
-        </header>       
-        <main>
-            {% block content %}{% endblock %}
-        </main>
-        <footer>
-            <p>© 2024 Site-ul meu</p>
-        </footer>
-    </body>
+<body>
+
+    <nav class="navbar">
+        
+        <div class="dropdown">
+            <button class="dropbtn"><a href="{% url 'index' %}">Acasa</a></button>
+            <div class="dropdown-content">
+                <a href="{% url 'index' %}#sectiunea-promo">Promotii</a>
+                <a href="{% url 'index' %}#sectiunea-noutati">Noutati</a>
+                <a href="{% url 'despre' %}">Despre</a>
+                {% comment %} <a href="{% url 'produse' %}">Toate Produsele</a> {% endcomment %}
+            </div>
+        </div>
+
+        <div class="dropdown">
+            <button class="dropbtn"><a href="{% url 'categorii' %}">Categorii</a></button>
+            <div class="dropdown-content">
+                
+                <a href="{% url 'produse' %}">Toate Produsele</a>
+                
+                <hr> {% for categorie in toate_categoriile_meniu %}
+                    <li>
+                        <a href="{% url 'detalii_categorii' categorie.nume_brand%}">
+                            {{ categorie.nume_brand }}
+                            {% if categorie.culoare %}
+                                <span style="
+                                    display: inline-block;
+                                    width: 15px;
+                                    height: 15px;
+                                    /* Aici folosim 'categorie', nu 'branduri' */
+                                    background-color: {{ categorie.culoare }};
+                                    border-radius: 50%;
+                                    border: 1px solid #999;
+                                    margin-left: 10px;
+                                    vertical-align: middle;">
+                                </span>
+                            {% endif %}
+                        </a>
+                    </li>
+                {% endfor %}
+                
+            </div>
+        </div>
+        
+
+    </nav>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+    <footer>
+        <p style="color: #555; font-size: 0.9em;">
+            Adresa ta IP este: {{ request.META.REMOTE_ADDR|default:"necunoscut" }}
+        </p>
+    </footer>
+</body>
 </html>

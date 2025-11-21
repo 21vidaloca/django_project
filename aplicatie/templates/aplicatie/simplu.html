@@ -1,9 +1,18 @@
 {% extends "baza.html" %}
-{% load static%}
-{% block title %}Pagina articolului{% endblock %}
-
+{% load static %}
 {% block content %}
-<h1>ceva</h1>
-<p>altceva</p>
-<img src="{% static "aplicatie/images/ceas.png" %}" alt="ceva">
+     
+    
+    <div class="banner-principal" style="margin-bottom: 30px; text-align: center;">
+        <img src="{% static 'aplicatie/images/banner_home.png' %}" alt="Bun venit" style="width: 200px; max-height: 200px; object-fit: cover;">
+        <h1>Bine ai venit in magazinul nostru de ceasuri</h1>
+    </div>
+    <section id="sectiunea-promo" style="height: 500px; background: #eee;">
+        <h1>Secțiunea Promoții</h1>
+        </section>
+
+    <section id="sectiunea-noutati" style="height: 500px; background: #ccc;">
+        <h1>Secțiunea Noutăți</h1>
+        </section>
+
 {% endblock %}

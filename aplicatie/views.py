@@ -1,17 +1,26 @@
 from django.shortcuts import render, get_object_or_404
 import locale
+from django.http import Http404
 from datetime import datetime
 from collections import Counter
 from .clase import Accesare
 from django.http import HttpResponse
 from .models import Ceasuri
+from .models import Brand
 from django.core.paginator import Paginator
+from .forms import ContactForm
+from django.shortcuts import render, redirect
 def index(request):
-	return HttpResponse("Primul raspuns")
+    
+    return render(request, 'aplicatie/simplu.html')
 try:
     locale.setlocale(locale.LC_TIME, 'ro_RO.UTF-8')
 except locale.Error:
     locale.setlocale(locale.LC_TIME, '')
+def pagina_despre(request):
+    return render(request, 'aplicatie/despre.html')
+def pagina_in_lucru(request):
+    return render(request, 'aplicatie/in_lucru.html')
 istoric_accesari=[]
 def bloc_de_cod(request):
     ip_client = request.META.get('REMOTE_ADDR')
@@ -97,14 +106,8 @@ def info(request):
 
 def afis_template(request):
     bloc_de_cod(request)
-    return render(request,"templates/baza.html",
-        {
-            "titlu_tab":"Titlu fereastra",
-            "titlu_articol":"Titlu afisat",
-            "continut_articol":"Continut text"
-        }
-    )
-
+    
+    return render(request,"templates/baza.html")
 
 def afis_template2(request):
     bloc_de_cod(request)
@@ -169,18 +172,60 @@ def log_view(request):
     return render(request, 'aplicatie/log.html', context)
 
 def afis_produse(request):
-    ceasuri=Ceasuri.objects.select_related('brand').order_by('nume_model')
+    ceasuri=Ceasuri.objects.all()
+    sortare='a'
+    if(request.GET.get('sort')):
+        sortare=request.GET.get('sort')
+    if(sortare == 'a'):
+        ceasuri=ceasuri.order_by('pret')
+    else:
+        ceasuri=ceasuri.order_by('-pret')
     paginator=Paginator(ceasuri,5)
     page_number=request.GET.get('page')
+    
     pagina_produse=paginator.get_page(page_number)
     context={
         "pagina_produse":pagina_produse,
     }
     return render(request, "aplicatie/ceasuri.html",context)
 
-def afisare_detalii_produs(request, produs_id):
-    ceas = get_object_or_404(Ceasuri, id=produs_id)
+def afisare_detalii_produs(request, nume_model):
+    ceasuri=Ceasuri.objects.filter(nume_model=nume_model)
+    # ceasuri=get_object_or_404(Ceasuri,nume_mode=nume_model)
+    if not ceasuri.exists():
+        raise Http404("Niciun produs găsit cu acest nume de model.")
+    nevoie='p'
     context = {
-        'ceas': ceas,
+        'ceasuri': ceasuri,
+        'nevoie': nevoie,
     }
     return render(request, "aplicatie/detalii.html",context)
+
+def afis_categorii(request):
+    categorii=Brand.objects.all()
+    
+    context={
+        'categorii':categorii,
+    }
+    return render(request, "aplicatie/categorii.html",context)
+
+def afis_categorii_spec(request, nume_brand):
+    detalii_categorii=Ceasuri.objects.filter(brand__nume_brand=nume_brand)
+    nevoie='c'
+    context={
+        'ceasuri':detalii_categorii,
+        'nevoie':nevoie,
+    }
+    return render(request, "aplicatie/detalii.html",context)
+
+def contact_view(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():  
+            nume = form.cleaned_data['nume']
+            email = form.cleaned_data['email']
+            mesaj = form.cleaned_data['mesaj']
+            return redirect('mesaj_trimis')
+    else:
+        form = ContactForm()
+    return render(request, 'aplicatie_exemplu/contact.html', {'form': form})

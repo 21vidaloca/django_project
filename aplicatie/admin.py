@@ -13,10 +13,10 @@ class CeasuriAdmin(admin.ModelAdmin):
     search_fields = ('nume_model', 'tip_geam')
     fieldsets= (
         ('Date generale', {
-            'fields': ('nume_model','pret')
+            'fields': ('nume_model','pret','brand', 'poza')
         }),
         ('Date specifice', {
-            'fields': ('stoc','tip_geam'),
+            'fields': ('stoc','tip_geam', 'diametru_carcasa'),
             'classes': ('collapse',)
         })
     )
