@@ -1,10 +1,143 @@
 {% extends "baza.html" %}
 
 {% block content %}
-    <h1>Listă Produse (Ceasuri)</h1>
+    <style>
+        .zona-filtre input[type="text"],
+        .zona-filtre input[type="number"],
+        .zona-filtre select {
+            width: 100%;             /* Ocupă tot spațiul disponibil */
+            padding: 6px 8px;        /* Spațiere interioară identică */
+            margin-bottom: 5px;      /* Spațiu sub ele */
+            border: 1px solid #ccc;  /* Bordură gri standard */
+            border-radius: 4px;      /* Colțuri ușor rotunjite */
+            box-sizing: border-box;  /* Asigură că padding-ul nu strică lățimea */
+            height: 35px;            /* Înălțime fixă pentru toate */
+            font-size: 14px;
+        }
 
+        .zona-filtre input:disabled {
+            background-color: #e9ecef; 
+            color: #495057;     
+            cursor: not-allowed;      
+        }
+    </style>
+    <h1>Lista Produse (Ceasuri)</h1>
+    <div class="zona-filtre" style="width: 250px; flex-shrink: 0; border-right: 1px solid #ddd; padding-right: 15px;">
+        <h3>Filtrează</h3>
+        <form method="get" action="">
+            <div style="margin-bottom: 15px; border-bottom: 1px solid #ddd; padding-bottom: 10px;">
+                <label style="font-weight: bold; color: #333;">{{ form.nr_pagini.label }}:</label><br>
+                {{ form.nr_pagini }}
+            </div>
+            <div style="margin-bottom: 10px;">
+                <label>{{ form.nume_model.label }}:</label><br>
+                {{ form.nume_model }}
+                {% if form.nume_model.errors %}
+                    <div style="color: red; font-size: 0.8em; margin-top: 2px;">
+                        {{ form.nume_model.errors }}
+                    </div>
+                {% endif %}
+            </div>
+            
+            {% if brand_curent %}
+                Brand:    
+                <div style="padding: 5px; background-color: #e9ecef; border: 1px solid #ced4da; border-radius: 4px; color: #495057;">
+                    <strong>{{ brand_curent.nume_brand }}</strong>
+                </div>
+                {{ form.brand }}
+            {% else %}
+                {{ form.brand }}
+            {% endif %}
+
+            <div style="margin-bottom: 10px;">
+                <label>{{ form.tip_geam.label }}:</label><br>
+                {{ form.tip_geam }}
+                {% if form.tip_geam.errors %}
+                    <div style="color: red; font-size: 0.8em; margin-top: 2px;">
+                        {{ form.tip_geam.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <hr>
+            
+            <div style="margin-bottom: 10px;">
+                <label>Pret (RON):</label><br>
+                {{ form.pret_min }} <span style="font-size:12px">min</span><br>
+                {% if form.pret_min.errors %}
+                    <div style="color: red; font-size: 0.8em; margin-top: 2px;">
+                        {{ form.pret_min.errors }}
+                    </div>
+                {% endif %}
+                
+                {{ form.pret_max }} <span style="font-size:12px">max</span>
+            </div>
+
+            <div style="margin-bottom: 10px;">
+                <label>Stoc:</label><br>
+                {{ form.stoc_min }} - {{ form.stoc_max }}
+                {% if form.stoc_min.errors %}
+                    <div style="color: red; font-size: 0.8em;">{{ form.stoc_min.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div style="margin-bottom: 10px;">
+                <label>Diametru (mm):</label><br>
+                {{ form.diametru_min }} - {{ form.diametru_max }}
+                {% if form.diametru_min.errors %}
+                    <div style="color: red; font-size: 0.8em;">{{ form.diametru_min.errors }}</div>
+                {% endif %}
+            </div>
+
+            <hr>
+
+            <div style="margin-bottom: 10px;">
+                <label>Mecanism:</label><br>
+                {{ form.mecanism }}
+            </div>
+            <div style="margin-bottom: 10px;">
+                <label>Curea:</label><br>
+                {{ form.curea }}
+            </div>
+            <div style="margin-bottom: 10px;">
+                <label>Ofertă:</label><br>
+                {{ form.oferta }}
+            </div>
+
+            <div style="margin-bottom: 10px;">
+                <label>Caracteristici:</label><br>
+                <div style="max-height: 150px; overflow-y: auto; border: 1px solid #eee; padding: 5px;">
+                    {% for checkbox in form.caracteristici %}
+                        <div style="margin-bottom: 2px;">
+                            {{ checkbox }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <input type="hidden" name="sort" value="{{ request.GET.sort }}">
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Aplica Filtre</button>
+                
+            <a href="{{ request.path }}" class="btn btn-secondary" style="display:block; text-align:center; margin-top: 5px; text-decoration: none; color: #555; border: 1px solid #ccc; padding: 5px;"
+            onclick="return confirm('Ești sigur că vrei să resetezi filtrele? \n\nVei pierde toate selecțiile curente (preț, model, etc) și se vor afișa toate produsele disponibile.');">
+            Reseteaza tot
+            </a>    
+        </form>
+    </div>
     <div class="lista-produse">
-        
+        {% if mesaj_paginare %}
+            <div style="background-color: #fff3cd; color: #856404; padding: 10px; border: 1px solid #ffeeba; margin-bottom: 15px; border-radius: 4px;">
+                ⚠️ {{ mesaj_paginare }}
+            </div>
+        {% endif %}
+        {% if mesaj_eroare %}
+            <div style="background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; padding: 15px; margin-bottom: 20px; border-radius: 5px;">
+                <strong>Acces Neautorizat:</strong> {{ mesaj_eroare }}
+                <br>
+                <small>V-am afisat produsele corecte ale categoriei <strong>{{ brand_curent.nume_brand }}</strong>.</small>
+            </div>
+        {% endif %}
         {% for ceas in pagina_produse %}
             <div class="produs" style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
                 
@@ -37,23 +170,21 @@
     <hr>
 
     <div class="pagination">
-        <span class="step-links">
-            
-            {% if pagina_produse.has_previous %}
-                <a href="?page=1">&laquo; prima</a>
-                <a href="?page={{ pagina_produse.previous_page_number }}">anterioara</a>
-            {% endif %}
+            <span class="step-links">
+                {% if pagina_produse.has_previous %}
+                    <a href="?page=1&{{ request.GET.urlencode|cut:'page=' }}">&laquo; prima</a>
+                    <a href="?page={{ pagina_produse.previous_page_number }}&{{ request.GET.urlencode|cut:'page=' }}">anterioara</a>
+                {% endif %}
 
-            <span class="current">
-                Pagina {{ pagina_produse.number }} din {{ pagina_produse.paginator.num_pages }}.
+                <span class="current">
+                    Pagina {{ pagina_produse.number }} din {{ pagina_produse.paginator.num_pages }}.
+                </span>
+
+                {% if pagina_produse.has_next %}
+                    <a href="?page={{ pagina_produse.next_page_number }}&{{ request.GET.urlencode|cut:'page=' }}">urmatoare</a>
+                    <a href="?page={{ pagina_produse.paginator.num_pages }}&{{ request.GET.urlencode|cut:'page=' }}">ultima &raquo;</a>
+                {% endif %}
             </span>
-
-            {% if pagina_produse.has_next %}
-                <a href="?page={{ pagina_produse.next_page_number }}">urmatoare</a>
-                <a href="?page={{ pagina_produse.paginator.num_pages }}">ultima &raquo;</a>
-            {% endif %}
-            
-        </span>
-    </div>
+        </div>
 
 {% endblock %}

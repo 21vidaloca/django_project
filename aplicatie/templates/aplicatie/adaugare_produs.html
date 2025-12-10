@@ -1,0 +1,97 @@
+{% extends "baza.html" %}
+
+{% block content %}
+<div class="container" style="max-width: 600px; margin: 20px auto;">
+    <h2>Adauga Produs Nou</h2>
+    <div class="alert alert-info">
+        Pretul final, stocul si tipul de geam vor fi calculate automat.
+    </div>
+    
+    <form method="post" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+        
+        <div class="mb-3">
+            <label style="font-weight: bold;">{{ form.nume_model.label }}</label> 
+            {{ form.nume_model }}
+            
+            {% if form.nume_model.errors %}
+                <div style="color: red; font-size: 0.9em;">
+                    {{ form.nume_model.errors }}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="mb-3">
+            <label style="font-weight: bold;">{{ form.brand.label }}</label>
+            {{ form.brand }}
+            {% if form.brand.errors %}
+                <div style="color: red;">{{ form.brand.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="mb-3">
+            <label style="font-weight: bold;">{{ form.diametru_carcasa.label }}</label>
+            {{ form.diametru_carcasa }}
+            
+            {% if form.diametru_carcasa.errors %}
+                <div style="color: red; font-size: 0.9em;">
+                    {{ form.diametru_carcasa.errors }}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="mb-3">
+            <label style="font-weight: bold;">{{ form.poza.label }}</label>
+            {{ form.poza }}
+            {% if form.poza.errors %}
+                <div style="color: red;">{{ form.poza.errors }}</div>
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            <label style="font-weight: bold;">{{ form.observatii.label }}</label>
+            {{ form.observatii }}
+            
+            {% if form.observatii.errors %}
+                <div style="color: red; font-size: 0.9em;">
+                    {{ form.observatii.errors }}
+                </div>
+            {% endif %}
+        </div>
+        <hr>
+        <h4>Calcul Pret</h4>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <label style="font-weight: bold;">{{ form.pret_import.label }}</label>
+                {{ form.pret_import }}
+                <small class="text-muted">Pretul de la furnizor</small>
+                
+                {% if form.pret_import.errors %}
+                    <div style="color: red; font-size: 0.9em;">
+                        {{ form.pret_import.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-6">
+                <label style="font-weight: bold;">{{ form.adaos.label }}</label>
+                {{ form.adaos }}
+                <small class="text-muted">Profit dorit (%)</small>
+                {% if form.adaos.errors %}
+                    <div style="color: red;">{{ form.adaos.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if form.non_field_errors %}
+            <div style="color: red; margin-top: 10px;">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
+        <button type="submit" class="btn btn-success" style="margin-top: 20px; width: 100%;">
+            Calculeaza si Salveaza
+        </button>
+    </form>
+</div>
+{% endblock %}

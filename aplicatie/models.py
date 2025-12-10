@@ -2,7 +2,21 @@ from django.db import models
 
 # Create your models here.
 import uuid
+from django.contrib.auth.models import AbstractUser
 
+class CustomUser(AbstractUser):
+    telefon = models.CharField(max_length=15, blank=True, null=True)
+    adresa = models.TextField(max_length=300, blank=True, null=True)
+    oras = models.CharField(max_length=50, blank=True, null=True)
+    cod_postal = models.CharField(max_length=10, blank=True, null=True)
+    data_nasterii = models.DateField(null=True, blank=True)
+    abonat_newsletter = models.BooleanField(default=False)
+
+    # pentru email
+    cod = models.CharField(max_length=100, null=True, blank=True)
+    email_confirmat = models.BooleanField(default=False)
+    def __str__(self):
+        return f"{self.username} ({self.first_name} {self.last_name})"
 
 class Caracteristici(models.Model):
     nume = models.CharField(max_length=100)

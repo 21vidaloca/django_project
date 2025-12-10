@@ -12,7 +12,6 @@
 <body>
 
     <nav class="navbar">
-        
         <div class="dropdown">
             <button class="dropbtn"><a href="{% url 'index' %}">Acasa</a></button>
             <div class="dropdown-content">
@@ -22,7 +21,7 @@
                 {% comment %} <a href="{% url 'produse' %}">Toate Produsele</a> {% endcomment %}
             </div>
         </div>
-
+        
         <div class="dropdown">
             <button class="dropbtn"><a href="{% url 'categorii' %}">Categorii</a></button>
             <div class="dropdown-content">
@@ -35,10 +34,9 @@
                             {{ categorie.nume_brand }}
                             {% if categorie.culoare %}
                                 <span style="
-                                    display: inline-block;
+                                display: inline-block;
                                     width: 15px;
                                     height: 15px;
-                                    /* Aici folosim 'categorie', nu 'branduri' */
                                     background-color: {{ categorie.culoare }};
                                     border-radius: 50%;
                                     border: 1px solid #999;
@@ -52,10 +50,46 @@
                 
             </div>
         </div>
+        <div class="dropdown">
+            <button class="dropbtn">
+                <a href="{% url 'contact' %}">Contact</a>
+            </button>
+        </div>
+        <div class="dropdown">
+            <button class="dropbtn">
+                <a href="{% url 'adaugare_produs' %}">Adaugare produse</a>
+            </button>
+        </div>
         
-
+        </div>
+        {% if user.is_authenticated %}
+            <span style="color: #333; align-self: center; font-weight: bold;">
+                Salut, {{ user.username }}!
+            </span>
+            
+            <div class="dropdown">
+                
+                <button class="dropbtn"><a href="{% url 'profil' %}">Profil</a></button>
+                <div class="dropdown-content">
+                    <a href="{% url 'schimbare_parola' %}">Schimbă Parola</a>
+                    <a href="{% url 'logout' %}">Deconectare</a>
+                </div>
+                
+            </div>
+        {% else %}
+            <div class="dropdown">
+                <button class="dropbtn">
+                    <a href="{% url 'inregistrare' %}">Inregistrare</a>
+                </button>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">
+                    <a href="{% url 'login' %}">Login</a>
+                </button>
+            </div>
+            {% endif %}
     </nav>
-
+    
     <main>
         {% block content %}
         {% endblock %}

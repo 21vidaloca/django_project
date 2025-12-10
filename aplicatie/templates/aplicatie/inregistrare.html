@@ -1,0 +1,41 @@
+{% extends "baza.html" %}
+
+{% block content %}
+<div class="container" style="max-width: 600px; margin: 30px auto;">
+    <h2>Creează un Cont Nou</h2>
+    
+    <form method="post" novalidate>
+        {% csrf_token %}
+        
+        {% for field in form %}
+            <div class="mb-3">
+                <label style="font-weight: bold;">{{ field.label }}</label>
+                
+                {{ field }}
+                
+                {% if field.help_text %}
+                    <small class="text-muted" style="display:block; font-size: 0.85em;">
+                        {{ field.help_text|safe }}
+                    </small>
+                {% endif %}
+
+                {% if field.errors %}
+                    <div style="color: red; font-size: 0.9em; margin-top: 5px;">
+                        {% for error in field.errors %}
+                            • {{ error }}<br>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 15px;">
+            Înregistrează-te
+        </button>
+    </form>
+    
+    <p style="text-align: center; margin-top: 15px;">
+        Ai deja cont? <a href="/login/">Autentifică-te aici</a>.
+    </p>
+</div>
+{% endblock %}

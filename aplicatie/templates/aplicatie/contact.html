@@ -1,0 +1,42 @@
+{% extends "baza.html" %}
+
+{% block content %}
+<div class="container" style="max-width: 800px; margin: 20px auto;">
+    <h2>Formular de Contact</h2>
+
+    {% if mesaj_succes %}
+        <div style="background-color: #d4edda; color: #155724; padding: 15px; margin-bottom: 20px; border: 1px solid #c3e6cb; border-radius: 5px;">
+            {{ mesaj_succes }}
+        </div>
+    {% endif %}
+
+    <form method="post" novalidate>
+        {% csrf_token %}
+        
+        {% for field in form %}
+            <div class="form-group" style="margin-bottom: 15px;">
+                <label for="{{ field.id_for_label }}" style="font-weight: bold;">
+                    {{ field.label }}
+                    {% if field.field.required %} <span style="color: red;">*</span> {% endif %}
+                </label>
+                
+                {{ field }}
+                
+                {% if field.errors %}
+                    <div style="color: red; font-size: 0.9em; margin-top: 5px;">
+                        {% for error in field.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                
+                {% if field.help_text %}
+                    <small style="color: grey;">{{ field.help_text }}</small>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <button type="submit" class="btn btn-primary" style="margin-top: 10px; padding: 10px 20px;">Trimite Mesajul</button>
+    </form>
+</div>
+{% endblock %}

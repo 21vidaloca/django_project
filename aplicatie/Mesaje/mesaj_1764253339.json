@@ -1,0 +1,14 @@
+{
+    "nume": "Ceva",
+    "prenume": "",
+    "cnp": "",
+    "email": "ceva@gmail.com",
+    "tip_mesaj": "intrebare",
+    "subiect": "Ceva",
+    "minim_zile_asteptare": 15,
+    "mesaj": "Ceva ceva ceva ceva Ceva",
+    "varsta": "20 ani și 7 luni",
+    "urgent": false,
+    "ip_adresa": "127.0.0.1",
+    "data_ora_sosire": "2025-11-27 16:22:19"
+}

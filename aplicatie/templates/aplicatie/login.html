@@ -1,0 +1,54 @@
+{% extends "baza.html" %}
+
+{% block content %}
+<div class="container" style="max-width: 400px; margin: 50px auto;">
+    <div class="card shadow">
+        <div class="card-body">
+            <h3 class="text-center mb-4">Autentificare</h3>
+            {% if messages %}
+                <div class="messages-container">
+                    {% for message in messages %}
+                        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" style="color: red; padding: 10px; margin-bottom: 10px; border: 1px solid red; background-color: #ffe6e6;">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <form method="post">
+                {% csrf_token %}
+                
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {% for error in form.non_field_errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <div class="mb-3">
+                    <label class="form-label">Username</label>
+                    {{ form.username }}
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Parola</label>
+                    {{ form.password }}
+                </div>
+
+                <div class="mb-3 form-check">
+                    {{ form.remember_me }}
+                    <label class="form-check-label" for="{{ form.remember_me.id_for_label }}">
+                        {{ form.remember_me.label }}
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">Logheaza-te</button>
+            </form>
+            
+            <div class="text-center mt-3">
+                <small>Nu ai cont? <a href="{% url 'inregistrare' %}">Inregistreaza-te</a></small>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

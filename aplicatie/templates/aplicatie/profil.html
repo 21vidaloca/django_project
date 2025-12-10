@@ -1,0 +1,29 @@
+{% extends "baza.html" %}
+
+{% block content %}
+<div class="container" style="max-width: 600px; margin: 40px auto;">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h3>Profil Utilizator (Date din Sesiune)</h3>
+        </div>
+        <div class="card-body">
+            <p><strong>Username:</strong> {{ date_utilizator.username }}</p>
+            <p><strong>Nume Complet:</strong> {{ date_utilizator.nume_complet }}</p>
+            <p><strong>Email:</strong> {{ date_utilizator.email }}</p>
+            <hr>
+            <p><strong>Telefon:</strong> {{ date_utilizator.telefon }}</p>
+            <p><strong>Adresă:</strong> {{ date_utilizator.adresa }}</p>
+            <p><strong>Dată înscriere:</strong> {{ date_utilizator.data_inscriere }}</p>
+
+            <div class="mt-4 d-flex justify-content-between">
+                <a href="{% url 'schimbare_parola' %}" class="btn btn-warning">
+                    🔒 Schimbă Parola
+                </a>
+                <a href="{% url 'logout' %}" class="btn btn-outline-danger">
+                    Deconectare
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
