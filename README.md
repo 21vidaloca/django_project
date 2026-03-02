@@ -1,9 +1,12 @@
 # Django Web Application
 
 ##  Overview
-A full-stack web application built with Python and the Django framework. This project demonstrates backend routing, server-side rendering, and relational database management. 
+Developed a full-stack e-commerce application in Django featuring a custom user authentication system with UUID-based email verification and IP-tracking to prevent brute-force login attacks.
 
-*(Note: Add 1-2 sentences here explaining exactly what the app does. E.g., "This application allows users to register, log in, and manage personal tasks.")*
+Engineered a relational database (Django ORM) for products and categories, implementing an advanced search engine with multi-parameter filtering, custom form validation, and pagination.
+
+Implemented Role-Based Access Control (RBAC) for administrative routes and built a custom server-side traffic logging and analytics system to monitor user activity.
+
 
 ##  Features
 * **Backend:** RESTful routing and data handling using Django.
